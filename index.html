@@ -9,11 +9,44 @@
     <link rel="stylesheet" href="app/scss/style.css"/>
 </head>
 <body>
-    <h1>Win or go home !</h1>
-    <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Consectetur sequi placeat iure dicta minus perspiciatis consequuntur, modi velit reiciendis. Earum qui dolorum, accusamus quis expedita nobis itaque sed voluptatum animi.</p>
-    <p>Alias, magni! Perferendis voluptas expedita porro quas cumque harum consequuntur magni. Temporibus culpa laboriosam dolor consectetur, atque modi dolorem sint ipsam, reprehenderit ut dolorum sequi accusamus repellendus mollitia. Deleniti, placeat?</p>
-    <p>Earum adipisci quam aliquid perspiciatis commodi at nobis facilis nulla ratione ad eos ea modi rerum nam quia quidem porro, vitae laudantium nostrum, atque recusandae inventore. Quisquam suscipit laborum excepturi!</p>
+    <script type="text/javascript" src="app/js/api-manager.js"></script>
     
-    <script src="app/js/script.js"></script>
+    <h1>Win or go home !</h1>
+
+    <select id="cbox_sports" onchange="show(this)">
+        <option value="">--- SELECT ---</option>
+     </select>
+
+     <p id="msg" style="width: 300px;"></p>
+
+    <script>
+
+window.addEventListener('load', async function() {
+
+    let sports = await GetAllSports();
+
+    var cbox = document.getElementById('cbox_sports');
+    let option;
+        for (let i = 0; i < sports.length; i++) {
+
+            // cbox.innerHTML = cbox.innerHTML +
+            //     "<option value=" + sports[i].group + "></option>";
+            option = document.createElement('option');
+            option.text = sports[i].group;
+            option.value = sports[i].group;
+            cbox.add(option);
+        }
+
+    });
+    
+    function show(ele) {
+        // GET THE SELECTED VALUE FROM <select> ELEMENT AND SHOW IT.
+        var msg = document.getElementById('msg');
+        msg.innerHTML = 'Selected Bird: <b>' + ele.options[ele.selectedIndex].group + '</b> </br>' +
+            'ID: <b>' + ele.value + '</b>';
+    }
+
+    </script>
+
 </body>
 </html>
