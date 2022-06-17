@@ -1,14 +1,14 @@
-// TODO: externalize the api key
-const apiKey = "***";
-const baseUrl = "https://api.the-odds-api.com/v4/"; 
+import { API_KEY } from "./api-key.js";
 
-async function GetAllSports(){
+export const baseUrl = "https://api.the-odds-api.com/v4/"; 
 
-  let request = baseUrl + "sports/?apiKey=" + apiKey;
+export async function GetAllSports(){
+
+  let requestt = baseUrl + "sports/?apiKey=" + API_KEY;
 
   try {
-    let res = await fetch(request);
-    return await res.json();
+    let res = await fetch(requestt);
+    return res.json();
 
   } catch (error) {
     console.log(error);
