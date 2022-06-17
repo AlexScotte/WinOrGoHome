@@ -7,12 +7,17 @@
     , initial-scale=1.0">
     <title>Win or go home !</title>
     <link rel="stylesheet" href="app/scss/style.css"/>
+    <script src="app/js/utils.js"></script>
 </head>
 <body>
     
     <h1>Win or go home !</h1>
 
-    <select id="cbox_sports">
+    <select id="cbox_sports_group">
+        <option value="">--- SELECT ---</option>
+     </select>
+
+     <select id="cbox_sports_title">
         <option value="">--- SELECT ---</option>
      </select>
 
@@ -22,30 +27,55 @@
 
         import * as ApiManager from "./app/js/api-manager.js"
 
-        var cbox = document.getElementById('cbox_sports');
+        var cboxGroups = document.getElementById('cbox_sports_group');
+        var cboxTitles = document.getElementById('cbox_sports_title');
 
+        let allSports = null;
         window.addEventListener('load', async function() {
 
             let sports = await ApiManager.GetAllSports();
-            let option;
-            for (let i = 0; i < sports.length; i++) {
+            allSports = Array.from(sports);
 
-                option = document.createElement('option');
-                option.text = sports[i].group;
-                option.value = sports[i].title;
-                option.value2 = sports[i].description;
-                cbox.add(option);
+            let option;
+
+            let sportGroups = [];
+            for (let i = 0; i < allSports.length; i++) {
+
+                const existingGroup = sportGroups.find(sg => sg == allSports[i].group);
+
+                if(existingGroup == null){
+
+                    sportGroups.push(allSports[i].group);
+                    option = document.createElement('option');
+                    option.text = sports[i].group;
+                    option.group = sports[i].group;
+                    cboxGroups.add(option);
+                }
+
             }
         });
 
-        cbox.onchange = async function show(event) {
+        cboxGroups.onchange = async function show(event) {
 
-                if(event == null)
-                    return;
+            if(event == null)
+                return;
 
-            var msg = document.getElementById('msg');
-            msg.innerHTML = 'Selected Bird: <b>' + cbox.options[cbox.selectedIndex].value +' - '+ cbox.options[cbox.selectedIndex].value2 +'</b> </br>' +
-                'ID: <b>' + cbox.options[cbox.selectedIndex].text + '</b>';
+            removeOptions(cboxTitles);
+
+            const selectedItem = cboxGroups.options[cboxGroups.selectedIndex];
+            let option;
+            for (let i = 0; i < allSports.length; i++) {
+
+                if(allSports[i].group == selectedItem.group){
+
+                    option = document.createElement('option');
+                    option.key = allSports[i].key;
+                    option.title = allSports[i].title;
+                    option.description = allSports[i].description;
+                    option.text = allSports[i].title + ' - ' + allSports[i].description;
+                    cboxTitles.add(option);
+                }
+            }
         };
 
     </script>
