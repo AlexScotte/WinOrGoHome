@@ -9,42 +9,44 @@
     <link rel="stylesheet" href="app/scss/style.css"/>
 </head>
 <body>
-    <script type="text/javascript" src="app/js/api-manager.js"></script>
     
     <h1>Win or go home !</h1>
 
-    <select id="cbox_sports" onchange="show(this)">
+    <select id="cbox_sports">
         <option value="">--- SELECT ---</option>
      </select>
 
      <p id="msg" style="width: 300px;"></p>
 
-    <script>
+    <script type="module">
 
-window.addEventListener('load', async function() {
+        import * as ApiManager from "./app/js/api-manager.js"
 
-    let sports = await GetAllSports();
+        var cbox = document.getElementById('cbox_sports');
 
-    var cbox = document.getElementById('cbox_sports');
-    let option;
-        for (let i = 0; i < sports.length; i++) {
+        window.addEventListener('load', async function() {
 
-            // cbox.innerHTML = cbox.innerHTML +
-            //     "<option value=" + sports[i].group + "></option>";
-            option = document.createElement('option');
-            option.text = sports[i].group;
-            option.value = sports[i].group;
-            cbox.add(option);
-        }
+            let sports = await ApiManager.GetAllSports();
+            let option;
+            for (let i = 0; i < sports.length; i++) {
 
-    });
-    
-    function show(ele) {
-        // GET THE SELECTED VALUE FROM <select> ELEMENT AND SHOW IT.
-        var msg = document.getElementById('msg');
-        msg.innerHTML = 'Selected Bird: <b>' + ele.options[ele.selectedIndex].group + '</b> </br>' +
-            'ID: <b>' + ele.value + '</b>';
-    }
+                option = document.createElement('option');
+                option.text = sports[i].group;
+                option.value = sports[i].title;
+                option.value2 = sports[i].description;
+                cbox.add(option);
+            }
+        });
+
+        cbox.onchange = async function show(event) {
+
+                if(event == null)
+                    return;
+
+            var msg = document.getElementById('msg');
+            msg.innerHTML = 'Selected Bird: <b>' + cbox.options[cbox.selectedIndex].value +' - '+ cbox.options[cbox.selectedIndex].value2 +'</b> </br>' +
+                'ID: <b>' + cbox.options[cbox.selectedIndex].text + '</b>';
+        };
 
     </script>
 
